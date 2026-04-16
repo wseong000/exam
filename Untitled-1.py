@@ -1,13 +1,13 @@
-# %%
+
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# 中文字型設定
+
 plt.rcParams["font.sans-serif"] = ["Microsoft JhengHei"]
 plt.rcParams["axes.unicode_minus"] = False
 
-# 台南座標
+
 LATITUDE = 22.9999
 LONGITUDE = 120.2270
 
@@ -44,7 +44,7 @@ def weather_code_to_text(code):
 def get_advice(max_temp, min_temp, rain_prob):
     advice_list = []
 
-    # 穿搭提醒
+ 
     if max_temp >= 32:
         advice_list.append("今天天氣很熱，建議穿短袖！外出要注意防曬和補水呦")
     elif max_temp >= 28:
@@ -54,11 +54,11 @@ def get_advice(max_temp, min_temp, rain_prob):
     else:
         advice_list.append("今天稍微偏涼，建議穿薄外套或長袖，才不會著涼")
 
-    # 溫差提醒
+
     if max_temp - min_temp >= 8:
         advice_list.append("早晚溫差較大，建議多帶一件外套，小心感冒==")
 
-    # 降雨提醒
+  
     if rain_prob >= 70:
         advice_list.append("降雨機率高，出門記得帶雨傘喔！才不會變落湯雞")
     elif rain_prob >= 40:
@@ -67,6 +67,20 @@ def get_advice(max_temp, min_temp, rain_prob):
         advice_list.append("降雨機率低，通常不用特別帶傘，免驚啦")
 
     return "；".join(advice_list)
+def get_exercise_advice(max_temp, min_temp, rain_prob):
+    if rain_prob >= 70:
+        return "適合室內運動，例如瑜珈、伸展或核心訓練"
+    elif rain_prob >= 40:
+        return "天氣不太穩定，建議以室內運動為主，也可以視情況短時間散步"
+    else:
+        if max_temp >= 32:
+            return "天氣炎熱，適合室內運動或傍晚散步，避免中午戶外劇烈運動"
+        elif max_temp >= 28:
+            return "適合輕度運動，例如散步、騎腳踏車或簡單慢跑"
+        elif max_temp >= 24:
+            return "天氣舒適，適合慢跑、健走、騎腳踏車等戶外運動"
+        else:
+            return "天氣較涼爽，適合跑步、健走等中等強度運動"
 
 def fetch_weather():
     response = requests.get(API_URL, timeout=10)
@@ -127,7 +141,7 @@ def main():
         weather_data = fetch_weather()
 
         print("一週天氣表格：")
-        print(weather_data[["日期", "天氣狀況", "最高溫", "最低溫", "降雨機率", "提醒"]])
+        print(weather_data[["日期", "天氣狀況", "最高溫", "最低溫", "降雨機率", "提醒","運動"]])
 
         print()
         show_weather(weather_data)
